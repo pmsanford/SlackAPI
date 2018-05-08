@@ -7,7 +7,7 @@
     <VersionPrefix>1.0.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
     <Authors>Inumedia</Authors>
-    <TargetFrameworks>net45;netstandard1.6;netstandard1.3</TargetFrameworks>
+    <TargetFrameworks>netstandard1.6;netstandard1.3</TargetFrameworks>
     <AssemblyName>SlackAPI</AssemblyName>
     <PackageProjectUrl>https://github.com/Inumedia/SlackAPI</PackageProjectUrl>
     <PackageLicenseUrl>http://choosealicense.com/licenses/mit/</PackageLicenseUrl>
