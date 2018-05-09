@@ -225,7 +225,7 @@ namespace SlackAPI
             return APIRequestWithTokenAsync<FileListResponse>(parameters.ToArray());
         }
 
-        private Task<K> GetHistoryAsync<K>(string channel, DateTime? latest = null, DateTime? oldest = null, int? count = null)
+        private Task<K> GetHistoryAsync<K>(string channel, DateTime? latest = null, DateTime? oldest = null, int? count = null, bool? inclusive = null)
             where K : MessageHistory
         {
             List<Tuple<string,string>> parameters = new List<Tuple<string,string>>();
@@ -237,23 +237,25 @@ namespace SlackAPI
                 parameters.Add(new Tuple<string, string>("oldest", oldest.Value.ToProperTimeStamp()));
             if(count.HasValue)
                 parameters.Add(new Tuple<string,string>("count", count.Value.ToString()));
+            if(inclusive.HasValue)
+                parameters.Add(new Tuple<string, string>("inclusive", inclusive.Value.ToString()));
 
             return APIRequestWithTokenAsync<K>(parameters.ToArray());
         }
 
-        public Task<ChannelMessageHistory> GetChannelHistoryAsync(Channel channelInfo, DateTime? latest = null, DateTime? oldest = null, int? count = null)
+        public Task<ChannelMessageHistory> GetChannelHistoryAsync(Channel channelInfo, DateTime? latest = null, DateTime? oldest = null, int? count = null, bool? inclusive = null)
         {
-            return GetHistoryAsync<ChannelMessageHistory>(channelInfo.id, latest, oldest, count);
+            return GetHistoryAsync<ChannelMessageHistory>(channelInfo.id, latest, oldest, count, inclusive);
         }
 
-        public Task<MessageHistory> GetDirectMessageHistoryAsync(DirectMessageConversation conversationInfo, DateTime? latest = null, DateTime? oldest = null, int? count = null)
+        public Task<MessageHistory> GetDirectMessageHistoryAsync(DirectMessageConversation conversationInfo, DateTime? latest = null, DateTime? oldest = null, int? count = null, bool? inclusive = null)
         {
-            return GetHistoryAsync<MessageHistory>(conversationInfo.id, latest, oldest, count);
+            return GetHistoryAsync<MessageHistory>(conversationInfo.id, latest, oldest, count, inclusive);
         }
 
-        public Task<GroupMessageHistory> GetGroupHistoryAsync(Channel groupInfo, DateTime? latest = null, DateTime? oldest = null, int? count = null)
+        public Task<GroupMessageHistory> GetGroupHistoryAsync(Channel groupInfo, DateTime? latest = null, DateTime? oldest = null, int? count = null, bool? inclusive = null)
         {
-            return GetHistoryAsync<GroupMessageHistory>(groupInfo.id, latest, oldest, count);
+            return GetHistoryAsync<GroupMessageHistory>(groupInfo.id, latest, oldest, count, inclusive);
         }
 
         public Task<MarkResponse> MarkChannelAsync(string channelId, DateTime ts)
@@ -489,6 +491,26 @@ namespace SlackAPI
         {
             var param = new Tuple<string, string>("user", user);
             return APIRequestWithTokenAsync<JoinDirectMessageChannelResponse>(param);
+        }
+
+        public Task<ReactionAddedResponse> AddReaction(
+            Action<ReactionAddedResponse> callback,
+            string name = null,
+            string channel = null,
+            string timestamp = null)
+        {
+            List<Tuple<string, string>> parameters = new List<Tuple<string, string>>();
+
+            if (!string.IsNullOrEmpty(name))
+                parameters.Add(new Tuple<string, string>("name", name));
+
+            if (!string.IsNullOrEmpty(channel))
+                parameters.Add(new Tuple<string, string>("channel", channel));
+
+            if (!string.IsNullOrEmpty(timestamp))
+                parameters.Add(new Tuple<string, string>("timestamp", timestamp));
+
+            return APIRequestWithTokenAsync<ReactionAddedResponse>(parameters.ToArray());
         }
 
         public Task<PostMessageResponse> PostMessageAsync(
