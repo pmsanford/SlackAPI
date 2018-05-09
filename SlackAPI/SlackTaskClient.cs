@@ -493,8 +493,7 @@ namespace SlackAPI
             return APIRequestWithTokenAsync<JoinDirectMessageChannelResponse>(param);
         }
 
-        public Task<ReactionAddedResponse> AddReaction(
-            Action<ReactionAddedResponse> callback,
+        public Task<ReactionAddedResponse> AddReactionAsync(
             string name = null,
             string channel = null,
             string timestamp = null)
